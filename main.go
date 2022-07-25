@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	BUFSIZE    = 64 * 1024   // 64 Kib
-	TOTAL_DATA = 1024 * 1024 // 1024 Kib * 64 Kib = 64 Gib
+	BUFSIZE    = 64 * 1024       // 64 Kib
+	TOTAL_DATA = 2 * 1024 * 1024 // 64 Gib
 )
 
 func partition(buf []byte, mid int) ([]byte, []byte) {
@@ -34,12 +34,20 @@ func main() {
 	debug.SetGCPercent(-1)
 	var (
 		buffer [BUFSIZE]byte
-		output = []byte{'y', '\n'}
-		writer = bufio.NewWriter(os.Stdout)
+		output = parseArgs()
+		writer = bufio.NewWriterSize(os.Stdout, BUFSIZE)
 	)
 
 	filled := fillBuffer(buffer[:], output)
 	for i := 0; i < TOTAL_DATA; i++ {
 		writer.Write(filled)
+	}
+}
+
+func parseArgs() []byte {
+	if len(os.Args) == 2 {
+		return append([]byte(os.Args[1]), '\n')
+	} else {
+		return []byte{'y', '\n'}
 	}
 }
