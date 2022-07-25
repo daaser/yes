@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	BUFSIZE    = 64 * 1024       // 64 Kib
+	BUFSIZ     = 64 * 1024       // 64 Kib
 	TOTAL_DATA = 2 * 1024 * 1024 // 64 Gib
 )
 
@@ -33,13 +33,14 @@ func fillBuffer(buffer, output []byte) []byte {
 func main() {
 	debug.SetGCPercent(-1)
 	var (
-		buffer [BUFSIZE]byte
+		buffer [BUFSIZ]byte
 		output = parseArgs()
-		writer = bufio.NewWriterSize(os.Stdout, BUFSIZE)
+		writer = bufio.NewWriterSize(os.Stdout, BUFSIZ)
 	)
 
 	filled := fillBuffer(buffer[:], output)
-	for i := 0; i < TOTAL_DATA; i++ {
+	//for i := 0; i < TOTAL_DATA; i++ {
+	for {
 		writer.Write(filled)
 	}
 }
